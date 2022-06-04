@@ -1,0 +1,11 @@
+.list__container{
+    background: #333;
+    max-width: 200px;
+    height: 500px;
+}
+.list__header-container{
+    background: #999;
+
+    display: flex;
+    justify-content: space-around;
+}

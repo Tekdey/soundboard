@@ -1,0 +1,9 @@
+.folder{
+    color: white;
+    padding: 5px 0;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #555;
+}

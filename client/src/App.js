@@ -1,7 +1,8 @@
 import React from "react";
+import Soundboard from "./components/soundboard/Soundboard";
 
 const App = () => {
-  return <div>App</div>;
+  return <Soundboard />;
 };
 
 export default App;
