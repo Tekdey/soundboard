@@ -1,4 +1,4 @@
-.folder{
+.folder-header{
     color: white;
     padding: 5px 0;
     cursor: pointer;
@@ -7,9 +7,16 @@
     align-items: center;
     border-bottom: 2px solid #555;
 }
-.folder > input {
+.folder-header > input {
     background: #333;
     color: white;
     border: none;
     outline: none;
+}
+.folder-content{
+    border-bottom: 2px solid #555;
+}
+.folder-item{
+    color: white;
+    padding: 2px 0;
 }
