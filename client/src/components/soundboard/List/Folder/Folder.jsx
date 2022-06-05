@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { ListContext } from "../../../context/ListContext";
+import React, { useContext, useEffect, useState } from "react";
+import { ListContext } from "../../../../context/ListContext";
 import "./Folder.css"
 
 const Folder = ({data, id}) => {

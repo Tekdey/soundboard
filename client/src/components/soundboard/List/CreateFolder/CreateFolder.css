@@ -1,0 +1,9 @@
+.folder-create{
+    display: flex;
+}
+.folder-create > input {
+    background: #333;
+    color: white;
+    outline: none;
+    border: none;
+}

@@ -7,3 +7,9 @@
     align-items: center;
     border-bottom: 2px solid #555;
 }
+.folder > input {
+    background: #333;
+    color: white;
+    border: none;
+    outline: none;
+}
