@@ -6,16 +6,35 @@ import { ListContext } from "../../../context/ListContext";
 import CreateFolder from "./CreateFolder/CreateFolder";
 
 const List = () => {
-  // const fakeBdd = [{id: 'Folder1', name: '', activ: false, rename: false}, {id: 'Folder2', name: '', activ: false, rename: false}, {id: 'Folder3', name: '', activ: false, rename: false}, {id: 'Folder4', name: '', activ: false, rename: false}, {id: 'Folder5', name: '', activ: false, rename: false}]
-  const [folderData, setFolderData] = useState([{id: 'Folder1', name: 'Default', items: ['item1', 'item2' ], activ: false, rename: false},{id: 'Folder1', name: 'Default', items: ['item1', 'item2', 'item3', 'item4', 'item5' ], activ: false, rename: false},{id: 'Folder1', name: 'Default', items: [ ], activ: false, rename: false}])
+  const fakeBdd = [
+    {id: Date.now() + 1, name: 'Default1', items: ['item1', 'item2' ], activ: false, rename: false}, 
+    {id: Date.now() + 2, name: 'Default2', items: ['item1', 'item2', 'item3', 'item4', 'item5' ], activ: false, rename: false}, 
+    {id: Date.now() + 3, name: 'Default3', items: ['item1', 'item2', 'item3' ], activ: false, rename: false}, 
+    {id: Date.now() + 4, name: 'Default4',items: ['item1' ], activ: false, rename: false}, 
+    {id: Date.now() + 5, name: 'Default5',items: ['item1' ], activ: false, rename: false}
+  ]
+  const [folderData, setFolderData] = useState(fakeBdd)
   const [folderCreate, setFolderCreate] = useState(false)
-
+  const [createNewItem, setCreateNewItem] = useState(false)
+  const [currentFolder, setCurrentFolder] = useState('')
+  console.log(currentFolder);
   useEffect(() => {
     console.log(folderData); //TODO: Save folders in bdd
   }, [folderData])
 
+  const propsObj = {
+    folderData, 
+    setFolderData, 
+    folderCreate, 
+    setFolderCreate, 
+    currentFolder, 
+    setCurrentFolder, 
+    setCreateNewItem,
+    createNewItem
+    }
+
   return (
-    <ListContext.Provider value={{folderData, setFolderData, folderCreate, setFolderCreate}}>
+    <ListContext.Provider value={propsObj}>
       <div className="list__container">
         <ListHeader />
           <div className="folder__container">

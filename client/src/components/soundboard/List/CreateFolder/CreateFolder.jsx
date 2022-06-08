@@ -4,13 +4,20 @@ import './CreateFolder.css'
 
 const CreateFolder = () => {
 
-    const {folderData, setFolderData, folderCreate, setFolderCreate} = useContext(ListContext)
+    const {folderData, setFolderData, setFolderCreate} = useContext(ListContext)
     const [inputValue, setInputValue] = useState('')
 
     useEffect(() => {
         function keyUp(e){
             if(e?.key === 'Enter'){
-                setFolderData((oldData) => [...oldData, {id: 'default', name: inputValue, activ: false, rename: false}])
+                setFolderData((oldData) => [...oldData, {
+                    id: Date.now(), 
+                    name: inputValue, 
+                    items:[], 
+                    activ: false, 
+                    rename: false
+                }])
+
                 setFolderCreate(false)
             }
         }
