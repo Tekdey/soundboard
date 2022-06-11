@@ -4,6 +4,7 @@ import ListHeader from "./ListHeader/ListHeader";
 import "./List.css"
 import { ListContext } from "../../../context/ListContext";
 import CreateFolder from "./CreateFolder/CreateFolder";
+import { CustomContextMenu } from "../../cursor/ContextMenu/ContextMenu";
 
 const List = () => {
   const fakeBdd = [
@@ -17,7 +18,7 @@ const List = () => {
   const [folderCreate, setFolderCreate] = useState(false)
   const [createNewItem, setCreateNewItem] = useState(false)
   const [currentFolder, setCurrentFolder] = useState('')
-  const [{x, y, showMenu}, setContextOptions] = useState({})
+  const [contextOptions, setContextOptions] = useState({})
 
   const propsObj = {
     folderData, 
@@ -33,16 +34,7 @@ const List = () => {
     
   return (
     <ListContext.Provider value={propsObj}>
-      {showMenu && (
-        <div className="menu-perso" onContextMenu={(e) => e.preventDefault()} style={{
-          top: y,
-          left: x,
-        }}>
-          <button className="btn b1">Rename</button>
-          <button className="btn b2">Delete</button>
-        </div>
-      )}
-
+      <CustomContextMenu {...contextOptions} />
       <div className="list__container">
         <ListHeader />
           <div className="folder__container" id="folder-options">

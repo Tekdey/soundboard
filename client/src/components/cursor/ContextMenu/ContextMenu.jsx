@@ -36,4 +36,16 @@ const useContextMenu = (target) => {
     return rightClickOptions;
 }
 
-export {useContextMenu};
+const CustomContextMenu = ({x,y,showMenu}) => {
+  return showMenu && (
+    <div className="menu-perso" onContextMenu={(e) => e.preventDefault()} style={{
+      top: y,
+      left: x,
+    }}>
+      <button className="btn b1">Rename</button>
+      <button className="btn b2">Delete</button>
+    </div>
+  )
+}
+
+export {useContextMenu, CustomContextMenu};
