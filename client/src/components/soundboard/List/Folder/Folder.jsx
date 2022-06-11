@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ListContext } from "../../../../context/ListContext";
+import { useContextMenu } from "../../../cursor/ContextMenu/ContextMenu";
 import "./Folder.css"
 
-const Folder = ({data, id}) => {
+const Folder = ({data, id, targetId}) => {
 
-    const {folderData, setCurrentFolder,setFolderCreate, createNewItem,setCreateNewItem, currentFolder} = useContext(ListContext)
+    const {folderData, setCurrentFolder,setFolderCreate, createNewItem,setCreateNewItem, currentFolder, setContextOptions} = useContext(ListContext)
     const [uniqueData, setUniqueData] = useState({...data})
     const [newItem, setNewItem] = useState(null)
 
+    const customContext = useContextMenu("#folder_" + id)
     useEffect(() => {
         function keyUp(e){
             if(e?.key === 'Enter'){
@@ -29,14 +31,18 @@ const Folder = ({data, id}) => {
     }, [createNewItem, folderData, id, newItem, setCreateNewItem, uniqueData])
 
     useEffect(() => {
-        if(uniqueData.activ){
-            console.log('activ');
-        }
-    }, [uniqueData.activ])
+        setContextOptions(customContext)
+    }, [customContext, setContextOptions])
+
     
+
   return (
         <div className="folder">
-           <div className="folder-header" onClick={(e) => {
+           <div className="folder-header" id={`folder_${id}`} 
+            onContextMenu={(e) => {
+                setContextOptions(customContext); console.log(e.target);
+            }}
+            onClick={(e) => {
                 setUniqueData({...uniqueData, activ: !uniqueData.activ});
                 setCurrentFolder(uniqueData.id);
             }}>

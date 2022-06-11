@@ -17,10 +17,7 @@ const List = () => {
   const [folderCreate, setFolderCreate] = useState(false)
   const [createNewItem, setCreateNewItem] = useState(false)
   const [currentFolder, setCurrentFolder] = useState('')
-  console.log(currentFolder);
-  useEffect(() => {
-    console.log(folderData); //TODO: Save folders in bdd
-  }, [folderData])
+  const [{x, y, showMenu}, setContextOptions] = useState({})
 
   const propsObj = {
     folderData, 
@@ -30,18 +27,28 @@ const List = () => {
     currentFolder, 
     setCurrentFolder, 
     setCreateNewItem,
-    createNewItem
-    }
-
+    createNewItem,
+    setContextOptions
+  }
+    
   return (
     <ListContext.Provider value={propsObj}>
+      {showMenu && (
+        <div className="menu-perso" onContextMenu={(e) => e.preventDefault()} style={{
+          top: y,
+          left: x,
+        }}>
+          <button className="btn b1">Rename</button>
+          <button className="btn b2">Delete</button>
+        </div>
+      )}
+
       <div className="list__container">
         <ListHeader />
-          <div className="folder__container">
-            {folderData?.map((folderId, index) => {
-               return <Folder key={index} id={index} data={folderId} />
-            })}
-
+          <div className="folder__container" id="folder-options">
+              {folderData?.map((folderId, index) => {
+                return <Folder key={index} id={index} data={folderId} />
+              })}
             {folderCreate && <CreateFolder/>}
           </div>
       </div>

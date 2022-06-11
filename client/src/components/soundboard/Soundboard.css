@@ -1,0 +1,15 @@
+.menu-perso{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 175px;
+    position: absolute;
+    height: 50px;
+    /* display: none; */
+}
+.btn{
+    font-size: 25px;
+    width: 100%;
+    height: 100%;
+}

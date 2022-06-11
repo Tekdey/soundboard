@@ -2,6 +2,7 @@
     background: #333;
     max-width: 200px;
     height: 500px;
+    overflow-y: scroll;
 }
 .list__header-container{
     background: #999;
