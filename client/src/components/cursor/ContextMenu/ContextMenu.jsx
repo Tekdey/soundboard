@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { ListContext } from "../../../context/ListContext";
 
 const useContextMenu = (target) => {
 
@@ -37,13 +38,16 @@ const useContextMenu = (target) => {
 }
 
 const CustomContextMenu = ({x,y,showMenu}) => {
+
+  const {setMenuOptions} = React.useContext(ListContext)
+
   return showMenu && (
     <div className="menu-perso" onContextMenu={(e) => e.preventDefault()} style={{
       top: y,
       left: x,
     }}>
-      <button className="btn b1">Rename</button>
-      <button className="btn b2">Delete</button>
+      <button className="btn b1" onClick={() => setMenuOptions((_) => ({..._, rename: true }))}>Rename</button>
+      <button className="btn b2" onClick={() => setMenuOptions((_) => ({..._, delete: true }))}>Delete</button>
     </div>
   )
 }

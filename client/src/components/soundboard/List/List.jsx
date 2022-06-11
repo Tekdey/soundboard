@@ -19,6 +19,7 @@ const List = () => {
   const [createNewItem, setCreateNewItem] = useState(false)
   const [currentFolder, setCurrentFolder] = useState('')
   const [contextOptions, setContextOptions] = useState({})
+  const [menuOptions, setMenuOptions] = useState({rename: false, delete: false})
 
   const propsObj = {
     folderData, 
@@ -29,7 +30,9 @@ const List = () => {
     setCurrentFolder, 
     setCreateNewItem,
     createNewItem,
-    setContextOptions
+    setContextOptions,
+    setMenuOptions,
+    menuOptions
   }
     
   return (
