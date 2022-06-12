@@ -2,19 +2,28 @@ import React, { useContext, useEffect, useState } from "react";
 import { ListContext } from "../../../../context/ListContext";
 import { useContextMenu } from "../../../cursor/ContextMenu/ContextMenu";
 import "./Folder.css"
+import FolderItem from "./FolderItem/FolderItem";
 
 const Folder = ({ data, id, targetId }) => {
 
     const { folderData, setCurrentFolder, createNewItem, setCreateNewItem, currentFolder, setContextOptions, menuOptions, setMenuOptions, deleteItem, setDeleteItem } = useContext(ListContext)
     const [uniqueData, setUniqueData] = useState({ ...data })
     const [newItem, setNewItem] = useState(null)
-    const [target, setTarget] = useState(null)
+    const [target, setTarget] = useState({
+        context: null,
+        parent: null,
+        child: null
+    })
 
     const customContext = useContextMenu("#folder_" + id)
     useEffect(() => {
         function keyUp(e) {
             if (e?.key === 'Enter') {
-                setTarget(null)
+                setTarget({
+                    context: null,
+                    parent: null,
+                    child: null
+                })
                 setMenuOptions((_) => ({..._, rename: false}))
                 setUniqueData({ ...uniqueData, rename: false })
                 if (newItem) {
@@ -39,22 +48,31 @@ const Folder = ({ data, id, targetId }) => {
 
     useEffect(() => {
         // Rename option
-       if(target){
-           if (Number(target) === id) {
-            if (menuOptions.rename) {
-                setUniqueData({ ...uniqueData, rename: true })
+        if (Number(target.context) === id || Number(target.parent) === id) {
+            if((target.parent && !target.child) || target.context){
+                if (menuOptions.rename) {
+                    setUniqueData({ ...uniqueData, rename: true })
+                }
+                if(menuOptions.delete){
+                    delete folderData[id]
+                    setMenuOptions((_) => ({..._, delete: false}))
+                }
+                if(deleteItem){
+                    delete folderData[id]
+                }
             }
-            if(menuOptions.delete){
-                delete folderData[id]
-                setMenuOptions((_) => ({..._, delete: false}))
+            if(target.parent && target.child){
+                delete folderData[Number(target.parent)].items[Number(target.child)]
             }
-            if(deleteItem){
-                delete folderData[id]
-            }
+            setTarget({
+                context: null,
+                parent: null,
+                child: null
+            })
         }
-       }
+       
 
-    }, [menuOptions.rename, menuOptions.delete, target])
+    }, [target.parent, target.child, target.context])
 
     // Init
     useEffect(() => {
@@ -70,7 +88,7 @@ const Folder = ({ data, id, targetId }) => {
 
             <div className="folder-header" id={`folder_${id}`}
                 onContextMenu={(e) => {
-                    setContextOptions(customContext); setTarget(e.target.id.split('_')[1]);;
+                    setContextOptions(customContext); setTarget((_) => ({..._, context: e.target.id.split('_')[1]}));;
                 }}
                 onClick={(e) => {
                     setUniqueData({ ...uniqueData, activ: !uniqueData.activ });
@@ -94,7 +112,7 @@ const Folder = ({ data, id, targetId }) => {
                     }
                 </div>
                 {deleteItem && (
-                    <svg className="delete_svg" onClick={(e) => setTarget(e.target.parentElement.id?.split('_')[1])} xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="red"><path d="M7.3 20.5Q6.55 20.5 6.025 19.975Q5.5 19.45 5.5 18.7V6H4.5V4.5H9V3.625H15V4.5H19.5V6H18.5V18.7Q18.5 19.45 17.975 19.975Q17.45 20.5 16.7 20.5ZM17 6H7V18.7Q7 18.8 7.1 18.9Q7.2 19 7.3 19H16.7Q16.8 19 16.9 18.9Q17 18.8 17 18.7ZM9.4 17H10.9V8H9.4ZM13.1 17H14.6V8H13.1ZM7 6V18.7Q7 18.825 7 18.913Q7 19 7 19Q7 19 7 18.913Q7 18.825 7 18.7Z"/></svg>
+                    <svg className="delete_svg" onClick={(e) => setTarget((_) => ({..._, parent: e.target.parentElement.id?.split('_')[1]}))} xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="red"><path d="M7.3 20.5Q6.55 20.5 6.025 19.975Q5.5 19.45 5.5 18.7V6H4.5V4.5H9V3.625H15V4.5H19.5V6H18.5V18.7Q18.5 19.45 17.975 19.975Q17.45 20.5 16.7 20.5ZM17 6H7V18.7Q7 18.8 7.1 18.9Q7.2 19 7.3 19H16.7Q16.8 19 16.9 18.9Q17 18.8 17 18.7ZM9.4 17H10.9V8H9.4ZM13.1 17H14.6V8H13.1ZM7 6V18.7Q7 18.825 7 18.913Q7 19 7 19Q7 19 7 18.913Q7 18.825 7 18.7Z"/></svg>
                     )}
             </div>
 
@@ -107,7 +125,9 @@ const Folder = ({ data, id, targetId }) => {
                     <input className="file-create" type="text" autoFocus={true} onBlur={() => setCreateNewItem(false)} onChange={(e) => setNewItem(e.target.value)} />
                 )}
                 {uniqueData.activ && uniqueData.items?.length > 0 && (
-                    uniqueData?.items.map((item, index) => <li key={index} className="folder-item">{item}</li>)
+                    uniqueData?.items.map((item, index) => (
+                        <FolderItem key={index} id={index} setTarget={setTarget} deleteItem={deleteItem}>{item}</FolderItem>
+                    ))
                 )}
             </ul>
         </div>

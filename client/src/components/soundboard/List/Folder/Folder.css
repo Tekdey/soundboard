@@ -21,10 +21,6 @@
 .folder-content{
     border-bottom: 2px solid #555;
 }
-.folder-item{
-    color: white;
-    padding: 2px 0;
-}
 .file-create{
     background: #333;
     color: white;
