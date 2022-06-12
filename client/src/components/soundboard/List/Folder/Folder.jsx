@@ -44,13 +44,20 @@ const Folder = ({ data, id, targetId }) => {
             if (menuOptions.rename) {
                 setUniqueData({ ...uniqueData, rename: true })
             }
+            if(menuOptions.delete){
+                delete folderData[id]
+                setMenuOptions((_) => ({..._, delete: false}))
+            }
         }
        }
 
-    }, [menuOptions.rename])
+    }, [menuOptions.rename, menuOptions.delete])
 
     return (
         <div className="folder">
+
+            {/* Folder */}
+
             <div className="folder-header" id={`folder_${id}`}
                 onContextMenu={(e) => {
                     setContextOptions(customContext); setContextTarget(e.target.id.split('_')[1]);;
@@ -72,6 +79,9 @@ const Folder = ({ data, id, targetId }) => {
                         onChange={(e) => setUniqueData({ ...uniqueData, name: e.target.value })} />
                     : <span onDoubleClick={() => setUniqueData({ ...uniqueData, rename: true })}>{uniqueData.name}</span>}
             </div>
+
+            {/* Items */}
+
             <ul className="folder-content" style={{
                 display: uniqueData.activ ? "block" : "none"
             }}>
