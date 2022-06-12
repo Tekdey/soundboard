@@ -17,6 +17,7 @@ const List = () => {
   const [folderData, setFolderData] = useState(fakeBdd)
   const [folderCreate, setFolderCreate] = useState(false)
   const [createNewItem, setCreateNewItem] = useState(false)
+  const [deleteItem, setDeleteItem] = useState(false)
   const [currentFolder, setCurrentFolder] = useState('')
   const [contextOptions, setContextOptions] = useState({})
   const [menuOptions, setMenuOptions] = useState({rename: false, delete: false})
@@ -32,7 +33,9 @@ const List = () => {
     createNewItem,
     setContextOptions,
     setMenuOptions,
-    menuOptions
+    menuOptions,
+    deleteItem,
+    setDeleteItem
   }
     
   return (

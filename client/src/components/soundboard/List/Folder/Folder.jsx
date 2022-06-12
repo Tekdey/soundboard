@@ -5,16 +5,16 @@ import "./Folder.css"
 
 const Folder = ({ data, id, targetId }) => {
 
-    const { folderData, setCurrentFolder, createNewItem, setCreateNewItem, currentFolder, setContextOptions, menuOptions, setMenuOptions } = useContext(ListContext)
+    const { folderData, setCurrentFolder, createNewItem, setCreateNewItem, currentFolder, setContextOptions, menuOptions, setMenuOptions, deleteItem, setDeleteItem } = useContext(ListContext)
     const [uniqueData, setUniqueData] = useState({ ...data })
     const [newItem, setNewItem] = useState(null)
-    const [contextTarget, setContextTarget] = useState(null)
+    const [target, setTarget] = useState(null)
 
     const customContext = useContextMenu("#folder_" + id)
     useEffect(() => {
         function keyUp(e) {
             if (e?.key === 'Enter') {
-                setContextTarget(null)
+                setTarget(null)
                 setMenuOptions((_) => ({..._, rename: false}))
                 setUniqueData({ ...uniqueData, rename: false })
                 if (newItem) {
@@ -39,8 +39,8 @@ const Folder = ({ data, id, targetId }) => {
 
     useEffect(() => {
         // Rename option
-       if(contextTarget){
-           if (Number(contextTarget) === id) {
+       if(target){
+           if (Number(target) === id) {
             if (menuOptions.rename) {
                 setUniqueData({ ...uniqueData, rename: true })
             }
@@ -48,10 +48,20 @@ const Folder = ({ data, id, targetId }) => {
                 delete folderData[id]
                 setMenuOptions((_) => ({..._, delete: false}))
             }
+            if(deleteItem){
+                delete folderData[id]
+            }
         }
        }
 
-    }, [menuOptions.rename, menuOptions.delete])
+    }, [menuOptions.rename, menuOptions.delete, target])
+
+    // Init
+    useEffect(() => {
+        if(menuOptions.rename || uniqueData.rename){
+            setDeleteItem(false)
+        }
+    }, [menuOptions.rename, uniqueData.rename])
 
     return (
         <div className="folder">
@@ -60,12 +70,14 @@ const Folder = ({ data, id, targetId }) => {
 
             <div className="folder-header" id={`folder_${id}`}
                 onContextMenu={(e) => {
-                    setContextOptions(customContext); setContextTarget(e.target.id.split('_')[1]);;
+                    setContextOptions(customContext); setTarget(e.target.id.split('_')[1]);;
                 }}
                 onClick={(e) => {
                     setUniqueData({ ...uniqueData, activ: !uniqueData.activ });
                     setCurrentFolder(uniqueData.id);
                 }}>
+                <div className="folder-header_left">
+
                 {uniqueData.activ ?
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#f3f3f3"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87" /><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z" /></svg>
                     :
@@ -73,11 +85,17 @@ const Folder = ({ data, id, targetId }) => {
 
                 {uniqueData.rename ?
                     <input type="text"
-                        autoFocus={true}
+                    autoFocus={true}
                         defaultValue={uniqueData.name}
-                        onBlur={() => {setUniqueData({ ...uniqueData, rename: false }); setMenuOptions((_) => ({..._, rename: false })); setContextTarget(null)}}
+                        onBlur={() => {setUniqueData({ ...uniqueData, rename: false }); setMenuOptions((_) => ({..._, rename: false })); setTarget(null)}}
                         onChange={(e) => setUniqueData({ ...uniqueData, name: e.target.value })} />
-                    : <span onDoubleClick={() => setUniqueData({ ...uniqueData, rename: true })}>{uniqueData.name}</span>}
+                        :
+                        <span onDoubleClick={() => setUniqueData({ ...uniqueData, rename: true })}>{uniqueData.name}</span>
+                    }
+                </div>
+                {deleteItem && (
+                    <svg className="delete_svg" onClick={(e) => setTarget(e.target.parentElement.id?.split('_')[1])} xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="red"><path d="M7.3 20.5Q6.55 20.5 6.025 19.975Q5.5 19.45 5.5 18.7V6H4.5V4.5H9V3.625H15V4.5H19.5V6H18.5V18.7Q18.5 19.45 17.975 19.975Q17.45 20.5 16.7 20.5ZM17 6H7V18.7Q7 18.8 7.1 18.9Q7.2 19 7.3 19H16.7Q16.8 19 16.9 18.9Q17 18.8 17 18.7ZM9.4 17H10.9V8H9.4ZM13.1 17H14.6V8H13.1ZM7 6V18.7Q7 18.825 7 18.913Q7 19 7 19Q7 19 7 18.913Q7 18.825 7 18.7Z"/></svg>
+                    )}
             </div>
 
             {/* Items */}

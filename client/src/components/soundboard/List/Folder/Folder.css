@@ -2,16 +2,21 @@
     color: white;
     padding: 5px 0;
     cursor: pointer;
+    border-bottom: 2px solid #555;
 
     display: flex;
-    align-items: center;
-    border-bottom: 2px solid #555;
+    justify-content: space-between;
 }
-.folder-header > input {
+.folder-header_left{
+    display: flex;
+    align-items: center;
+}
+.folder-header_left > input {
     background: #333;
     color: white;
     border: none;
     outline: none;
+    width: 100%;
 }
 .folder-content{
     border-bottom: 2px solid #555;
@@ -25,4 +30,7 @@
     color: white;
     outline: none;
     border: none;
+}
+.delete_svg{
+    margin-right: 6.5862px;
 }
