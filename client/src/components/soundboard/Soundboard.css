@@ -14,5 +14,7 @@
     height: 100%;
 }
 .soundboard__container{
+    display: flex;
     height: 500px;
+    width: 800px;
 }

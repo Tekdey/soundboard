@@ -1,0 +1,15 @@
+.sound__container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sound{
+    background: rgba(0, 0, 0, 0.548);
+    color: wheat;
+    width: 60px;
+    height: 60px;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
