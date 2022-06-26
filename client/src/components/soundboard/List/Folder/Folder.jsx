@@ -6,7 +6,7 @@ import FolderItem from "./FolderItem/FolderItem";
 
 const Folder = ({ data, id, targetId }) => {
 
-    const { folderData, setCurrentFolder, createNewItem, setCreateNewItem, currentFolder, setContextOptions, menuOptions, setMenuOptions, deleteItem, setDeleteItem } = useContext(ListContext)
+    const { folderData,setFolderData, setCurrentFolder, createNewItem, setCreateNewItem, currentFolder, setContextOptions, menuOptions, setMenuOptions, deleteItem, setDeleteItem } = useContext(ListContext)
     const [uniqueData, setUniqueData] = useState({ ...data })
     const [newItem, setNewItem] = useState(null)
     const [target, setTarget] = useState({
@@ -14,8 +14,10 @@ const Folder = ({ data, id, targetId }) => {
         parent: null,
         child: null
     })
+    
 
     const customContext = useContextMenu("#folder_" + id)
+    /* A useEffect hook that is listening for the enter key to be pressed */
     useEffect(() => {
         function keyUp(e) {
             if (e?.key === 'Enter') {
@@ -31,10 +33,7 @@ const Folder = ({ data, id, targetId }) => {
                     setNewItem(null)
                     setCreateNewItem(false)
                 }
-                const index = folderData.indexOf(folderData[id])
-                if (index !== -1) {
-                    folderData[id] = uniqueData
-                }
+                
             }
         }
         document.addEventListener('keyup', keyUp)
@@ -42,10 +41,28 @@ const Folder = ({ data, id, targetId }) => {
 
     }, [createNewItem, folderData, id, newItem, setCreateNewItem, uniqueData])
 
+
+
+    // Update data when new item
+    useEffect(() => {
+        const index = folderData.indexOf(folderData[id])
+        if (index !== -1) {
+            folderData[id] = uniqueData
+        }
+    }, [uniqueData.items])
+
     useEffect(() => {
         setContextOptions(customContext)
     }, [customContext, setContextOptions])
 
+   /* Listening for the target to be set. If the target is set, it will check if the target is the same
+   as the id of the folder. If it is, it will check if the target is a parent or a child. If it is a
+   parent, it will check if the menu option is rename. If it is, it will set the uniqueData to
+   rename. If it is not, it will check if the menu option is delete. If it is, it will delete the
+   folder and update the folderData. If it is not, it will check if the deleteItem is true. If it
+   is, it will delete the folder and update the folderData. If it is not, it will do nothing. If the
+   target is a child, it will delete the child and update the folderData. If the target is not a
+   parent or a child, it will do nothing. */
     useEffect(() => {
         // Rename option
         if (Number(target.context) === id || Number(target.parent) === id) {
@@ -55,14 +72,21 @@ const Folder = ({ data, id, targetId }) => {
                 }
                 if(menuOptions.delete){
                     delete folderData[id]
+                    const newFolder = folderData.filter((folder) => folder) // force update
                     setMenuOptions((_) => ({..._, delete: false}))
+                    setFolderData(newFolder)
                 }
                 if(deleteItem){
                     delete folderData[id]
+                    const newFolder = folderData.filter((folder) => folder) // force update
+                    setFolderData(newFolder)
                 }
             }
             if(target.parent && target.child){
+                console.log(folderData[Number(target.parent)].items[Number(target.child)]);
                 delete folderData[Number(target.parent)].items[Number(target.child)]
+                folderData[Number(target.parent)].items = folderData[Number(target.parent)].items.filter((item) => item)
+                setFolderData([...folderData])
             }
             setTarget({
                 context: null,
@@ -74,13 +98,14 @@ const Folder = ({ data, id, targetId }) => {
 
     }, [target.parent, target.child, target.context])
 
-    // Init
+    /* Listening for the menuOptions.rename or uniqueData.rename to be true. If it is, it will set the
+    deleteItem to false. */
     useEffect(() => {
         if(menuOptions.rename || uniqueData.rename){
             setDeleteItem(false)
         }
     }, [menuOptions.rename, uniqueData.rename])
-
+    
     return (
         <div className="folder">
 

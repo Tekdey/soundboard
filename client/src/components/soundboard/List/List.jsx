@@ -22,6 +22,16 @@ const List = () => {
   const [contextOptions, setContextOptions] = useState({})
   const [menuOptions, setMenuOptions] = useState({rename: false, delete: false})
 
+  const [forceUpdate, setForceUpdate] = useState(true)
+
+
+/* A hack to force the component to re-render. */
+  useEffect(() => {
+    setForceUpdate(false)
+    setTimeout(() => setForceUpdate(true), 0)
+  }, [folderData])
+
+
   const propsObj = {
     folderData, 
     setFolderData, 
@@ -44,8 +54,10 @@ const List = () => {
       <div className="list__container">
         <ListHeader />
           <div className="folder__container" id="folder-options">
-              {folderData?.map((folderId, index) => {
-                return <Folder key={index} id={index} data={folderId} />
+              {forceUpdate && folderData.map((folderId, index) => {
+                if(folderId){
+                  return <Folder key={index} id={index} data={folderId} />
+                }
               })}
             {folderCreate && <CreateFolder/>}
           </div>

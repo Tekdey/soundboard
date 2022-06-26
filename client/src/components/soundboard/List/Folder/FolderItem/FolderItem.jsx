@@ -9,6 +9,7 @@ const FolderItem = ({id, children, deleteItem, setTarget}) => {
         {children}
         {deleteItem && 
             <svg onClick={(e) => setTarget((_) => ({..._, 
+                /* Getting the id of the parent and child of the item that is being deleted. */
                 parent: e.target.parentNode.parentNode.parentNode.children[0].id?.split('_')[1], 
                 child: e.target.parentNode.id?.split('_')[1]
             }))} 
