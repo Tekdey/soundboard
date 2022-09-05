@@ -13,6 +13,20 @@ const board = () => {
         </div>
         <div className="board__items">
            <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
+           <Sound />
         </div>
     </div>
   )

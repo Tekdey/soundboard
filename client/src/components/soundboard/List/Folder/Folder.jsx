@@ -83,7 +83,7 @@ const Folder = ({ data, id, targetId }) => {
                 }
             }
             if(target.parent && target.child){
-                console.log(folderData[Number(target.parent)].items[Number(target.child)]);
+                // console.log(folderData[Number(target.parent)].items[Number(target.child)]);
                 delete folderData[Number(target.parent)].items[Number(target.child)]
                 folderData[Number(target.parent)].items = folderData[Number(target.parent)].items.filter((item) => item)
                 setFolderData([...folderData])

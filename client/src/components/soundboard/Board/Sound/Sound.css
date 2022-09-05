@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 }
 .sound{
     background: rgba(0, 0, 0, 0.548);
